@@ -33,6 +33,16 @@ int strum = 5;  // delay between each note of strum
 //int midiChannel[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 //int instruments[] = {26, 999, 999, 999, 999, 999, 999, 999, 999, 999 /*Drums*/, 999, 999, 999, 999, 999, 999};
 
+// Jingle Bell Rock
+char style = 'c';   // Valid options = "n" for notes or "c" for chords
+// int* song[] = {CHORD_Ab, CHORD_Bbm7, CHORD_Eb7, CHORD_Eb7s5, CHORD_Db, CHORD_Ddim, CHORD_Fm7, CHORD_Bb7, CHORD_F7s5, CHORD_F7, CHORD_Dbm6, BELLS};
+// int midiChannel[] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 10};
+int instruments[] = {999, 49, 999, 999, 999, 999, 999, 999, 999, 999 /*Drums*/, 999, 999, 999, 999, 999, 999};
+/* Reordered for landscape mpr121.  3,2,1,0  7,6,5,4  11,10,9,8 */
+int* song[] = {CHORD_Eb7s5, CHORD_Eb7, CHORD_Bbm7, CHORD_Ab, CHORD_Bb7, CHORD_Fm7, CHORD_Ddim, CHORD_Db, BELLS, CHORD_Dbm6, CHORD_F7, CHORD_F7s5};
+int midiChannel[] = {2, 2, 2, 2, 2, 2, 2, 2, 10, 2, 2, 2};
+
+
 // Simple Chords
 //char style = 'c';
 //int* song[] = {CHORD_C, CHORD_Am, CHORD_F, CHORD_G, CHORD_Dm, CHORD_Em, CHORD_F7, CHORD_G7, DRUM_BASS, DRUM_SIDE, CYM_1, CYM_2};  // 0's in song prevent that key from sounding
@@ -51,11 +61,11 @@ int strum = 5;  // delay between each note of strum
 //int midiChannel[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; // midi channel for each button
 //int instruments[] = {102, 999, 999, 999, 999, 999, 999, 999, 999, 999 /*Drums*/, 999, 999, 999, 999, 999, 999};
 
-// Button box
-char style = 'c';
-int* song[] = {CHORD_C, CHORD_C, CHORD_C, CHORD_C, CHORD_F, CHORD_F, CHORD_F, CHORD_F, CHORD_G, CHORD_G, CHORD_G, CHORD_G};
-int midiChannel[] = {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
-int instruments[] = {26, 102, 35, 75, 999, 999, 999, 999, 999, 999 /*Drums*/, 999, 999, 999, 999, 999, 999};
+// // Button box
+// char style = 'c';
+// int* song[] = {CHORD_C, CHORD_C, CHORD_C, CHORD_C, CHORD_F, CHORD_F, CHORD_F, CHORD_F, CHORD_G, CHORD_G, CHORD_G, CHORD_G};
+// int midiChannel[] = {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
+// int instruments[] = {26, 102, 35, 75, 999, 999, 999, 999, 999, 999 /*Drums*/, 999, 999, 999, 999, 999, 999};
 
 
 MIDI_CREATE_DEFAULT_INSTANCE();
@@ -66,7 +76,7 @@ void setup() {
   if (DEBUG) {
     Serial.begin(115200);  // needed for hairless midi
   }
-  if (!cap.begin(0x5B)) {
+  if (!cap.begin(0x5A)) {
     // Serial.println("MPR121 not found, check wiring?");
     while (1);
   }
@@ -75,7 +85,7 @@ void setup() {
   delay(200);
   for (uint8_t i = 0; i < 16; i++) {  // Set instruments for all 16 MIDI channels
     if (instruments[i] < 128) {
-      MIDI.sendProgramChange(instruments[i], i + 1);
+      MIDI.sendProgramChange(instruments[i], i+1);
     }
   }
 }
@@ -105,7 +115,6 @@ void loop() {
       }
     }
   }
-
 
   // reset our state
   lasttouched = currtouched;
